@@ -56,13 +56,31 @@ def run_meta_assistant(
     logger.info("openai_instruction: {}".format(openai_instruction))
     logger.info("grpc_server: {}".format(grpc_server))
 
+    # 讯飞语音转文字客户端
+    # TODO: 填写APIKey等信息
+    stt_client = STTClient(
+        APPID="",
+        APISecret="",
+        APIKey="",
+    )
+
     # Start the main loop
     while True:
-        audio_recording = MicrophoneStream.get_audio(
-            sample_rate=microphone_rate, duration=20
-        )
-        # Process the audio recording
-        text = SpeechToText.transcribe(audio=audio_recording)
+        # audio_recording = MicrophoneStream.get_audio(
+        #     sample_rate=microphone_rate, duration=20
+        # )
+        # # Process the audio recording
+        # text = SpeechToText.transcribe(audio=audio_recording)
+
+        # 读取音频，并转成文字
+        # 需要在控制台按任意键开始监听，然后按任意键结束监听
+        # TODO: 这部分代码未经测试。后续是否需要一个图形界面？
+        input("Press Any Key to start...")
+        stt_client.start()
+        input()
+        stt_client.stop()
+        stt_client.join()
+        text = stt_client.message
         logger.info("Transcribed text: {}".format(text))
 
         # Generate the response
