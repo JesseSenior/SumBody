@@ -13,6 +13,7 @@ from meta_assistant.services import (
     Audio2Face,
     Audio2Chunks,
     TextSummary,
+    STTClient,
 )
 
 app = typer.Typer(
@@ -71,31 +72,28 @@ def run_meta_assistant(
             input=text,
             instruction=openai_instruction,
         )
-        
-        
+
         # 再次调取语音转文字，获取文段主题
         audio_recording_theme = MicrophoneStream.get_audio(
             sample_rate=microphone_rate, duration=20
         )
         theme = SpeechToText.transcribe(audio=audio_recording_theme)
-        
+
         tsum = TextSummary(theme, 1000, 1000)
         summary = tsum.forward(text)
         logger.info("Summary: {}".format(summary))
-        
+
         # 再次调取语音转文字，获取问题
         audio_recording_que = MicrophoneStream.get_audio(
             sample_rate=microphone_rate, duration=20
         )
         que = SpeechToText.transcribe(audio=audio_recording_que)
-        ans = tsum.question(que,text)
+        ans = tsum.question(que, text)
         if len(ans) != 0:
             logger.info("Answer: {}".format("".join(ans)))
         else:
             logger.info("未回答相关信息。")
-        
-        
-        
+
         # Generate the speech audio from the response
         audio_synthesized = TextToSpeech.synthesize(text=response)
 
