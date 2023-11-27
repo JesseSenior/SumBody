@@ -1,7 +1,11 @@
 #custom
+/*.code-workspace
+/tests
 .idea
 **/service-account.json
 **/api-key.txt
+/desktop.ini
+/poetry.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
