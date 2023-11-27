@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-import time
 import typer
-import queue
-import threading
-import sounddevice as sd
 
 from sumbody import logger
 from sumbody.domain import MicrophoneStream
-from sumbody.services import *
+from sumbody.services import (
+    TextToSpeech,
+    Audio2Face,
+    Audio2Chunks,
+    TextSummary,
+    STTClient,
+)
 
 app = typer.Typer(
     name="sumbody",
@@ -62,6 +64,9 @@ def run_sumbody(
     microphone_rate = STTClient.RATE
     logger.info("Received arguments:")
     logger.info("microphone_rate: {}".format(microphone_rate))
+    logger.info("stt_appid: {}".format(stt_appid))
+    logger.info("stt_apisecret: {}".format(stt_apisecret))
+    logger.info("stt_apikey: {}".format(stt_apikey))
     logger.info("openai_key: {}".format(openai_key))
     logger.info("openai_model: {}".format(openai_model))
     logger.info("openai_instruction: {}".format(openai_instruction))
@@ -79,7 +84,7 @@ def run_sumbody(
         # 读取音频，并转成文字
         # 需要在控制台按任意键开始监听，然后按任意键结束监听
         # TODO: 这部分代码未经测试。后续是否需要一个图形界面？
-        input("Press Any Key to start...")
+        input("Press enter Key to start...")
         stt_client.start()
         input()
         stt_client.stop()
