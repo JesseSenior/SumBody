@@ -18,7 +18,7 @@ class TextSummary:
 
             summary_max_len (int, optional): 总结内容的最大长度（若超出则继续总结）.
         """
-        self.theme = theme
+        # self.theme = theme
         self.chunk_size = chunk_size
         self.summary_max_len = summary_max_len
 
@@ -28,15 +28,29 @@ class TextSummary:
         ]
         return chunks
 
+    # def get_completion(self, chunk, model="gpt-3.5-turbo") -> str:
+    #     messages = [
+    #         {"role": "system", "content": "You are a helpful text summarizer"},
+    #         {
+    #             "role": "user",
+    #             "content": "请使用中文总结以下内容，内容来源及主题为{}，\
+    #             总结的开头不要出现来源范围以及如：“这段内容”，“该内容”，“无法概括”等概括总述的词汇：".format(
+    #                 self.theme
+    #             ),
+    #         },
+    #         {"role": "user", "content": chunk},
+    #     ]
+    #     response = openai.ChatCompletion.create(model=model, messages=messages)
+    #     message: str = response.choices[0].message["content"]
+    #     time.sleep(0.1)
+    #     return message
+    
     def get_completion(self, chunk, model="gpt-3.5-turbo") -> str:
         messages = [
             {"role": "system", "content": "You are a helpful text summarizer"},
             {
                 "role": "user",
-                "content": "请使用中文总结以下内容，内容来源及主题为{}，\
-                总结的开头不要出现来源范围以及如：“这段内容”，“该内容”，“无法概括”等概括总述的词汇：".format(
-                    self.theme
-                ),
+                "content": "请使用中文总结以下内容，总结的开头不要出现来源范围以及如：“这段内容”，“该内容”，“无法概括”等概括总述的词汇："
             },
             {"role": "user", "content": chunk},
         ]
