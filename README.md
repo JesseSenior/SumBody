@@ -1,4 +1,4 @@
-# sum_body
+# SumBody
 
 An intelligent meeting summary assistant based on ChatGPT.
 
@@ -38,7 +38,7 @@ Then, you're ready to run the application:
 GRPC_SERVER="localhost:50051"
 OPENAI_INSTRUCTION="answer to this sentence like you are chatting with a friend"
 
-poetry run python -m sum_body \
+poetry run python -m sumbody \
     --grpc-server=$GRPC_SERVER \
     --openai-instruction=$OPENAI_INSTRUCTION
 ```

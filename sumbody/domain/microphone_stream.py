@@ -2,7 +2,7 @@ import queue
 import pyaudio
 import time
 
-from sum_body import logger
+from sumbody import logger
 
 
 class MicrophoneStream:

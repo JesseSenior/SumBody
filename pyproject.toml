@@ -1,30 +1,32 @@
 [tool.poetry]
-name = "meta-assistant"
+name = "SumBody"
 version = "0.1.0"
-description = ""
-authors = ["Nicola Massarenti <nicola.massarenti@gmail.com>"]
+description = "An intelligent meeting summary assistant based on ChatGPT."
+license = "MIT"
+authors = [
+    "Nicola Massarenti <nicola.massarenti@gmail.com>",
+    "Jesse Senior <jessesenior@outlook.com>",
+    "Di Fang <fti@mail.scut.edu.cn>",
+    "Xiaoye Zhu <Xshellye@github.com>",
+    "1722087564 <1722087564@github.com>",
+    "chen021127 <chen021127@github.com>",
+]
 readme = "README.md"
-packages = [{include = "sum_body"}]
+repository = "https://github.com/JesseSenior/SumBody"
+packages = [{ include = "sumbody" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-typer = "^0.7.0"
-loguru = "^0.6.0"
-grpcio = "^1.51.1"
-grpcio-tools = "^1.51.1"
-numpy = "^1.24.1"
-soundfile = "^0.11.0"
-pydantic = "^1.10.4"
-google-cloud-speech = "^2.17.1"
-pyaudio = "^0.2.13"
-six = "^1.16.0"
-openai = "^0.26.4"
-google-cloud-texttospeech = "^2.14.1"
-webrtcvad = "^2.0.10"
-sounddevice = "^0.4.5"
-pydub = "^0.25.1"
 keyboard = "^0.13.5"
-
+loguru = "^0.6.0"
+numpy = "^1.24.1"
+openai = "^0.26.4"
+protobuf = "^4.25.0"
+pyaudio = "^0.2.13"
+sounddevice = "^0.4.5"
+soundfile = "^0.11.0"
+typer = "^0.7.0"
+websocket_client = "^1.6.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"

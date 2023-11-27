@@ -3,8 +3,8 @@ import grpc
 
 from typing import List
 
-from sum_body import logger
-from sum_body.services.grpc import audio2face_pb2, audio2face_pb2_grpc
+from sumbody import logger
+from sumbody.services.grpc import audio2face_pb2, audio2face_pb2_grpc
 
 
 class Audio2Face:
