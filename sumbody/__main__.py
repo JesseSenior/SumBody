@@ -1,23 +1,39 @@
+# -*- coding: utf-8 -*-
 import time
 import typer
 import queue
 import threading
 import sounddevice as sd
 
-from sum_body import logger
-from sum_body.domain import MicrophoneStream
-from sum_body.services import *
+from sumbody import logger
+from sumbody.domain import MicrophoneStream
+from sumbody.services import *
 
 app = typer.Typer(
-    name="sum_body",
+    name="sumbody",
     help="An intelligent meeting summary assistant that uses the Text-To-Speech, the Speech-to-Text, and the Generative AI technologies to generate summary and to stream the audio to the Nvidia Audio2Face plugin.",
 )
 
 
 @app.command()
-def run_sum_body(
-    microphone_rate: int = typer.Option(
-        default=16000, help="The sample rate of the microphone"
+def run_sumbody(
+    stt_appid: str = typer.Option(
+        ...,
+        help="The STT Client APPID",
+        envvar="STT_APPID",
+        show_envvar=True,
+    ),
+    stt_apisecret: str = typer.Option(
+        ...,
+        help="The STT Client APISECRET",
+        envvar="STT_APISECRET",
+        show_envvar=True,
+    ),
+    stt_apikey: str = typer.Option(
+        ...,
+        help="The STT Client APIKEY",
+        envvar="STT_APIKEY",
+        show_envvar=True,
     ),
     openai_key: str = typer.Option(
         ...,
@@ -36,13 +52,14 @@ def run_sum_body(
         help="The instruction to be used by the OpenAI model",
     ),
     grpc_server: str = typer.Option(
-        ..., help="The endpoint of the gRPC server"
+        default="localhost:50051", help="The endpoint of the gRPC server"
     ),
 ):
     """
     Run the meta-assistant
     :return:
     """
+    microphone_rate = STTClient.RATE
     logger.info("Received arguments:")
     logger.info("microphone_rate: {}".format(microphone_rate))
     logger.info("openai_key: {}".format(openai_key))
@@ -51,21 +68,14 @@ def run_sum_body(
     logger.info("grpc_server: {}".format(grpc_server))
 
     # 讯飞语音转文字客户端
-    # TODO: 填写APIKey等信息
     stt_client = STTClient(
-        APPID="",
-        APISecret="",
-        APIKey="",
+        APPID=stt_appid,
+        APISecret=stt_apisecret,
+        APIKey=stt_apikey,
     )
 
     # Start the main loop
     while True:
-        # audio_recording = MicrophoneStream.get_audio(
-        #     sample_rate=microphone_rate, duration=20
-        # )
-        # # Process the audio recording
-        # text = SpeechToText.transcribe(audio=audio_recording)
-
         # 读取音频，并转成文字
         # 需要在控制台按任意键开始监听，然后按任意键结束监听
         # TODO: 这部分代码未经测试。后续是否需要一个图形界面？
@@ -76,14 +86,6 @@ def run_sum_body(
         stt_client.join()
         text = stt_client.message
         logger.info("Transcribed text: {}".format(text))
-
-        # Generate the response
-        response = TextGenerator.generate(
-            key=openai_key,
-            model=openai_model,
-            input=text,
-            instruction=openai_instruction,
-        )
 
         # 再次调取语音转文字，获取文段主题
         audio_recording_theme = MicrophoneStream.get_audio(
@@ -107,7 +109,7 @@ def run_sum_body(
             logger.info("未回答相关信息。")
 
         # Generate the speech audio from the response
-        audio_synthesized = TextToSpeech.synthesize(text=response)
+        audio_synthesized = TextToSpeech.synthesize(text=ans)
 
         # Split the audio into chunks
         audio_chunks, sample_rate = Audio2Chunks.split_audio_to_chunks(

@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+import carb
+
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 proto_src_root = os.path.normpath(os.path.join(ROOT_DIR, "proto/"))
 proto_dst_root = os.path.normpath(os.path.join(ROOT_DIR, "."))
@@ -17,5 +19,5 @@ cmd = [
     f"{proto_fpath}",
 ]
 
-print(cmd)
+carb.log_info(cmd)
 subprocess.call(cmd)

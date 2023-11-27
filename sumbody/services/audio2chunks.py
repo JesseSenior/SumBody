@@ -27,8 +27,25 @@ class Audio2Chunks:
         # Convert MP3 to WAV
         subprocess.call(["ffmpeg", "-i", mp3_file, wav_file])
 
+        data, sample_rate = Audio2Chunks.split_audio_to_chunks_raw(wav_file)
+
+        # Clean up the files
+        os.remove(mp3_file)
+        os.remove(wav_file)
+
+        # Return the chunks and the sample rate
+        return data, sample_rate
+    
+    @staticmethod
+    def split_audio_to_chunks_raw(audio_file: bytes) -> Tuple[List[bytes], int]:
+        """
+        Split the audio into chunks
+        :param audio: the audio file to be split (wav format)
+        :param chunk_size: the size of each chunk
+        :return: a list of chunks and the sample rate
+        """
         # Extract the audio data and the sample rate
-        data, sample_rate = soundfile.read(wav_file)
+        data, sample_rate = soundfile.read(audio_file)
 
         # Split the audio into chunks
         chunk_size = sample_rate // 10
@@ -36,10 +53,6 @@ class Audio2Chunks:
             data[i * chunk_size : i * chunk_size + chunk_size]
             for i in range(len(data) // chunk_size + 1)
         ]
-
-        # Clean up the files
-        os.remove(mp3_file)
-        os.remove(wav_file)
 
         # Return the chunks and the sample rate
         return data, sample_rate
