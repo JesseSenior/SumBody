@@ -7,18 +7,30 @@ openai.api_base = "https://api.chatanywhere.cn/v1"
 
 
 class TextSummary:
+    # def __init__(
+    #     self, theme: str, chunk_size=1000, summary_max_len=1000
+    # ) -> None:
+    #     """
+    #     Args:
+    #         theme (str): 总结内容的主题.
+
+    #         chunk_size (int, optional): 对gpt prompt的长度.
+
+    #         summary_max_len (int, optional): 总结内容的最大长度（若超出则继续总结）.
+    #     """
+    #     self.theme = theme
+    #     self.chunk_size = chunk_size
+    #     self.summary_max_len = summary_max_len
+    
     def __init__(
-        self, theme: str, chunk_size=1000, summary_max_len=1000
+        self, chunk_size=1000, summary_max_len=1000
     ) -> None:
         """
         Args:
-            theme (str): 总结内容的主题.
-
             chunk_size (int, optional): 对gpt prompt的长度.
 
             summary_max_len (int, optional): 总结内容的最大长度（若超出则继续总结）.
         """
-        # self.theme = theme
         self.chunk_size = chunk_size
         self.summary_max_len = summary_max_len
 
