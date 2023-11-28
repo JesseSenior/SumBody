@@ -49,10 +49,6 @@ def run_sumbody(
         envvar="OPENAI_MODEL",
         show_envvar=True,
     ),
-    openai_instruction: str = typer.Option(
-        default="",
-        help="The instruction to be used by the OpenAI model",
-    ),
     grpc_server: str = typer.Option(
         default="localhost:50051", help="The endpoint of the gRPC server"
     ),
@@ -69,7 +65,6 @@ def run_sumbody(
     logger.info("stt_apikey: {}".format(stt_apikey))
     logger.info("openai_key: {}".format(openai_key))
     logger.info("openai_model: {}".format(openai_model))
-    logger.info("openai_instruction: {}".format(openai_instruction))
     logger.info("grpc_server: {}".format(grpc_server))
 
     # 讯飞语音转文字客户端
@@ -99,7 +94,12 @@ def run_sumbody(
         
         # theme = SpeechToText.transcribe(audio=audio_recording_theme)
 
-        tsum = TextSummary(1024, 1024)
+        tsum = TextSummary(
+            chunk_size=1024,
+            summary_max_len=1024,
+            model=openai_model,
+            api_key=openai_key
+        )
         ans = tsum.forward(text)
         logger.info("Summary: {}".format(ans))
 
