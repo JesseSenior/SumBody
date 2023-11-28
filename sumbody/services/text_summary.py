@@ -77,7 +77,7 @@ class TextSummary:
     def forward(self, text) -> list:
         summary = []
         chunks = self.split_text_into_chunks(text, self.chunk_size)
-        for chunk in chunks[:2]:
+        for chunk in chunks:
             summary.append(self.get_completion(chunk,self.model))
         result = "".join(summary)
         while len(result) > self.summary_max_len:
@@ -87,7 +87,7 @@ class TextSummary:
     def question(self, que: str, text: list):
         chunks = self.split_text_into_chunks(text, self.chunk_size)
         answers = []
-        for chunk in chunks[:2]:
+        for chunk in chunks:
             messages = [
                 {
                     "role": "system",
@@ -111,7 +111,7 @@ class TextSummary:
         return answers
 
 
-# def summay_main(que:str, text:str, theme:str, chunk_size = 1000, summary_max_len = 1000 ):
+# def summay_main(text:str, chunk_size = 1000, summary_max_len = 1000 ):
 
 #     # ### 读取测试文本并预处理
 #     # with open("珠峰班宣讲会会议纪要.txt","r",encoding='UTF-8') as f:
@@ -121,14 +121,9 @@ class TextSummary:
 #     #     final_text.append(re.sub(r'\[[^\]]*\]', '', sentence.strip()))
 #     # final_text = "".join(final_text)
 #     # ###
-
-#     tsum = TextSummary(theme, chunk_size, summary_max_len)
+#     tsum = TextSummary(chunk_size, summary_max_len, api_key="")
 #     summary = tsum.forward(text)
-#     ans = tsum.question(que,text)
 #     print("总结后文本长度为：" + str(len(summary)))
-#     summarydic = {}
 #     print("总结内容:" + summary)
-#     if len(ans) != 0:
-#         print("回答:" + "".join(ans))
-#     else:
-#         print("未回答相关信息。")
+
+# summay_main(text = "")
