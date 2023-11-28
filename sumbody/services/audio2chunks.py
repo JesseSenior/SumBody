@@ -1,9 +1,10 @@
-import soundfile
 import uuid
 import subprocess
 import os
-
 from typing import List, Tuple
+
+import numpy as np
+import soundfile
 
 
 class Audio2Chunks:
@@ -42,6 +43,9 @@ class Audio2Chunks:
             data, sample_rate = audio, framerate
         else:
             raise "Unknown datatype"
+
+        if len(data.shape) > 1:
+            data = np.average(data, axis=1)
 
         # Split the audio into chunks
         chunk_size = sample_rate // 10

@@ -1,24 +1,40 @@
+import argparse
 import soundfile
-import numpy as np
-
 from sumbody.services import Audio2Chunks, Audio2Face
 
+parser = argparse.ArgumentParser(
+    description="A unit test for clipping audio files and streaming them to the Audio2Face plugin."
+)
 
-test_wav_file_path = r"tests\asset\english_voice_male_p3_neutral.wav"
+parser.add_argument(
+    "--audio_file_path", type=str, required=True, help="Path to the audio file."
+)
+parser.add_argument(
+    "--endpoint",
+    type=str,
+    default="localhost:50051",
+    help="The endpoint of the server.",
+)
+parser.add_argument(
+    "--instance_name",
+    type=str,
+    default="/World/audio2face/audio_player_streaming",
+    help="The instance name.",
+)
 
-data, sample_rate = soundfile.read(test_wav_file_path)
+args = parser.parse_args()
 
-if len(data.shape) > 1:
-    data = np.average(data, axis=1)
-
+data, sample_rate = soundfile.read(args.audio_file_path)
 
 # Split the audio into chunks
-audio_chunks, sample_rate = Audio2Chunks.split_audio_to_chunks(data, "wav", sample_rate)
+audio_chunks, sample_rate = Audio2Chunks.split_audio_to_chunks(
+    data, "wav", sample_rate
+)
 
 # Stream the audio to the Audio2Face plugin
 Audio2Face.stream_chunk(
     audio=audio_chunks,
-    endpoint="localhost:50051",
+    endpoint=args.endpoint,
     sample_rate=sample_rate,
-    instance_name="/World/audio2face/audio_player_streaming",
+    instance_name=args.instance_name,
 )
