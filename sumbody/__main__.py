@@ -2,7 +2,6 @@
 import typer
 
 from sumbody import logger
-from sumbody.domain import MicrophoneStream
 from sumbody.services import (
     TextToSpeech,
     Audio2Face,
@@ -19,6 +18,7 @@ app = typer.Typer(
 
 @app.command()
 def run_sumbody(
+    # STT part
     stt_appid: str = typer.Option(
         ...,
         help="The STT Client APPID",
@@ -37,20 +37,32 @@ def run_sumbody(
         envvar="STT_APIKEY",
         show_envvar=True,
     ),
+    # OpenAI part
     openai_key: str = typer.Option(
         ...,
         help="The OpenAI API key",
         envvar="OPENAI_KEY",
         show_envvar=True,
     ),
+    openai_base: str = typer.Option(
+        default=None,
+        help="The OpenAI API base url",
+        envvar="OPENAI_BASE",
+        show_envvar=True,
+    ),
     openai_model: str = typer.Option(
-        default="davinci",
+        default="gpt-3.5-turbo",
         help="The OpenAI model to be used",
         envvar="OPENAI_MODEL",
         show_envvar=True,
     ),
+    # Audio2Face part
     grpc_server: str = typer.Option(
         default="localhost:50051", help="The endpoint of the gRPC server"
+    ),
+    instance_name: str = typer.Option(
+        default="/World/audio2face/PlayerStreaming",
+        help="Instance name to Audio2Face stream player.",
     ),
 ):
     """
@@ -59,22 +71,34 @@ def run_sumbody(
     """
     microphone_rate = STTClient.RATE
     logger.info("Received arguments:")
+
     logger.info("microphone_rate: {}".format(microphone_rate))
+
     logger.info("stt_appid: {}".format(stt_appid))
     logger.info("stt_apisecret: {}".format(stt_apisecret))
     logger.info("stt_apikey: {}".format(stt_apikey))
-    logger.info("openai_key: {}".format(openai_key))
-    logger.info("openai_model: {}".format(openai_model))
-    logger.info("grpc_server: {}".format(grpc_server))
 
-    # 讯飞语音转文字客户端
+    logger.info("openai_key: {}".format(openai_key))
+    logger.info(
+        "openai_base: {}".format(openai_base if openai_base is not None else "DEFAULT")
+    )
+    logger.info("openai_model: {}".format(openai_model))
+
+    logger.info("grpc_server: {}".format(grpc_server))
+    logger.info("instance_name: {}".format(instance_name))
+
     stt_client = STTClient(
         APPID=stt_appid,
         APISecret=stt_apisecret,
         APIKey=stt_apikey,
     )
 
-    # Start the main loop
+    tsum = TextSummary(
+        api_key=openai_key,
+        api_base=openai_base,
+        model=openai_model,
+    )
+
     while True:
         # 读取音频，并转成文字
         # 需要在控制台按任意键开始监听，然后按任意键结束监听
@@ -87,32 +111,9 @@ def run_sumbody(
         text = stt_client.message
         logger.info("Transcribed text: {}".format(text))
 
-        # 再次调取语音转文字，获取文段主题
-        audio_recording_theme = MicrophoneStream.get_audio(
-            sample_rate=microphone_rate, duration=20
-        )
-        
-        # theme = SpeechToText.transcribe(audio=audio_recording_theme)
-
-        tsum = TextSummary(
-            chunk_size=1024,
-            summary_max_len=1024,
-            model=openai_model,
-            api_key=openai_key
-        )
+        # Generate the summary by GPT
         ans = tsum.forward(text)
         logger.info("Summary: {}".format(ans))
-
-        # # 再次调取语音转文字，获取问题
-        # audio_recording_que = MicrophoneStream.get_audio(
-        #     sample_rate=microphone_rate, duration=20
-        # )
-        # que = SpeechToText.transcribe(audio=audio_recording_que)
-        # ans = tsum.question(que, text)
-        # if len(ans) != 0:
-        #     logger.info("Answer: {}".format("".join(ans)))
-        # else:
-        #     logger.info("未回答相关信息。")
 
         # Generate the speech audio from the response
         audio_synthesized = TextToSpeech.synthesize(text=ans)
@@ -127,7 +128,7 @@ def run_sumbody(
             audio=audio_chunks,
             endpoint=grpc_server,
             sample_rate=sample_rate,
-            instance_name="/World/audio2face/PlayerStreaming",
+            instance_name=instance_name,
         )
 
 
