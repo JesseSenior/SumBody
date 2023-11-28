@@ -1,6 +1,6 @@
 #custom
 /*.code-workspace
-/tests
+/tests/asset
 .idea
 **/service-account.json
 **/api-key.txt
