@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 from wsgiref.handlers import format_date_time
 
 
-class PIClientXF():
+class APIClientXF():
     
     STT_HOST = "iat-api.xfyun.cn"
     
