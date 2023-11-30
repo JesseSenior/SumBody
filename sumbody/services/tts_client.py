@@ -123,5 +123,6 @@ if __name__ == "__main__":
     
 
     TTS_client = TTSClient(APPID, APIKey, APISecret)
-    result = TTS_client.synthesize("原神,启动")
+    txt="输入的文字";
+    result = TTS_client.synthesize(txt)
     #print(result)
