@@ -13,11 +13,15 @@ from time import mktime
 import _thread as thread
 import os
 
+from wsgiref.handlers import format_date_time
+
+
+
 class TTSClient(object):
-    def __init__(self, APPID, APIKey, APISecret, Text=""):
-        self.APPID = APPID
-        self.APIKey = APIKey
-        self.APISecret = APISecret
+    def __init__(self, API_manager: APIClientXF, Text=""):
+        self.APPID = API_manager.APPID
+        self.APIKey = API_manager.APIKey
+        self.APISecret = API_manager.APISecret
         self.Text = Text
     class WsParam:
         # 初始化
@@ -113,16 +117,16 @@ class TTSClient(object):
         ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
         with open('./demo.pcm', 'rb') as f:
             content = f.read()
-        
         return content    
 
 if __name__ == "__main__":
-    APPID = "**"
-    APIKey = "**"
-    APISecret = "**"
-    
+    api_manager = APIClientXF(
+        APPID="**",
+        APISecret="**",
+        APIKey="**",
+    )
 
-    TTS_client = TTSClient(APPID, APIKey, APISecret)
+    TTS_client = TTSClient(api_manager)
     txt="输入的文字";
     result = TTS_client.synthesize(txt)
-    #print(result)
+    print(result)
