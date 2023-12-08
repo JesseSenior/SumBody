@@ -8,6 +8,7 @@ from sumbody.services import (
     Audio2Chunks,
     TextSummary,
     STTClient,
+    APIClientXF,
 )
 
 app = typer.Typer(
@@ -87,11 +88,13 @@ def run_sumbody(
     logger.info("grpc_server: {}".format(grpc_server))
     logger.info("instance_name: {}".format(instance_name))
 
-    stt_client = STTClient(
+    managerXF = APIClientXF(
         APPID=stt_appid,
         APISecret=stt_apisecret,
         APIKey=stt_apikey,
     )
+
+    stt_client = STTClient(managerXF)
 
     tsum = TextSummary(
         api_key=openai_key,
