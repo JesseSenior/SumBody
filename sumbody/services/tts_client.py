@@ -21,7 +21,7 @@ class APIClientXF():
     STT_HOST = "iat-api.xfyun.cn"
     def __init__(self, APPID: str, APISecret: str, APIKey: str) -> None:
         super().__init__()
-
+        
         self.APPID = APPID
         self.APISecret = APISecret
         self.APIKey = APIKey
@@ -31,6 +31,7 @@ class TTSClient(object):
         self.APIKey = API_manager.APIKey
         self.APISecret = API_manager.APISecret
         self.Text = Text
+        
     class WsParam:
         # 初始化
         def __init__(self, APPID, APIKey, APISecret, Text):
@@ -74,8 +75,7 @@ class TTSClient(object):
             url = url + '?' + urlencode(v)
             return url
 
-    @staticmethod
-    def synthesize(text: str) -> bytes:
+    def synthesize(self,text: str) -> bytes:
         def on_open(ws):
             def run(*args):
                 if wsParam is not None:
@@ -115,9 +115,7 @@ class TTSClient(object):
             ...
             print("### closed ###")
 
-        wsParam = TTSClient.WsParam(APPID=TTS_client.APPID, APISecret=TTS_client.APISecret,
-                                   APIKey=TTS_client.APIKey,
-                                   Text=text)
+        wsParam = self.WsParam(APPID=self.APPID, APISecret=self.APISecret, APIKey=self.APIKey, Text=text)
         websocket.enableTrace(False)
         wsUrl = wsParam.create_url()
         ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_error=on_error, on_close=on_close)
@@ -128,15 +126,4 @@ class TTSClient(object):
         audio = AudioSegment(data=data, sample_width=2, frame_rate=16000, channels=1)
         tmp_file = "tmp_audio.wav"
         audio.export(tmp_file, format="wav")
-        play(audio)   
-
-if __name__ == "__main__":
-    api_manager = APIClientXF(
-        APPID="**",
-        APISecret="**",
-        APIKey="**",
-    )
-
-    TTS_client = TTSClient(api_manager)
-    txt="你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「提瓦特」的幻想世界，在这里，被神选中的人将被授予「神之眼」，导引元素之力。你将扮演一位名为「旅行者」的神秘角色，在自由的旅行中邂逅性格各异、能力独特的同伴们，和他们一起击败强敌，找回失散的亲人——同时，逐步发掘「原神」的真相。";
-    TTS_client.synthesize(txt)
+        play(audio) 
