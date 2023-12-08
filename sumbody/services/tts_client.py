@@ -12,11 +12,19 @@ from datetime import datetime
 from time import mktime
 import _thread as thread
 import os
-
+from pydub import AudioSegment
+from pydub.playback import play
 from wsgiref.handlers import format_date_time
 
 
+class APIClientXF():
+    STT_HOST = "iat-api.xfyun.cn"
+    def __init__(self, APPID: str, APISecret: str, APIKey: str) -> None:
+        super().__init__()
 
+        self.APPID = APPID
+        self.APISecret = APISecret
+        self.APIKey = APIKey
 class TTSClient(object):
     def __init__(self, API_manager: APIClientXF, Text=""):
         self.APPID = API_manager.APPID
@@ -115,9 +123,12 @@ class TTSClient(object):
         ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_error=on_error, on_close=on_close)
         ws.on_open = on_open
         ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
-        with open('./demo.pcm', 'rb') as f:
-            content = f.read()
-        return content    
+        with open('demo.pcm', 'rb') as f:
+            data = f.read()
+        audio = AudioSegment(data=data, sample_width=2, frame_rate=16000, channels=1)
+        tmp_file = "tmp_audio.wav"
+        audio.export(tmp_file, format="wav")
+        play(audio)   
 
 if __name__ == "__main__":
     api_manager = APIClientXF(
@@ -127,6 +138,5 @@ if __name__ == "__main__":
     )
 
     TTS_client = TTSClient(api_manager)
-    txt="输入的文字";
-    result = TTS_client.synthesize(txt)
-    print(result)
+    txt="你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「提瓦特」的幻想世界，在这里，被神选中的人将被授予「神之眼」，导引元素之力。你将扮演一位名为「旅行者」的神秘角色，在自由的旅行中邂逅性格各异、能力独特的同伴们，和他们一起击败强敌，找回失散的亲人——同时，逐步发掘「原神」的真相。";
+    TTS_client.synthesize(txt)
