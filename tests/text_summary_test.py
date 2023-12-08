@@ -32,7 +32,7 @@ def read_file(file_path):
         return file.read()
 
 
-def summay_main(text: str, api_key, api_base, chunk_size=1000, summary_max_len=1000):
+def summary_main(text: str, api_key, api_base, chunk_size=1000, summary_max_len=1000):
     tsum = TextSummary(
         api_key=api_key,
         api_base=api_base,
@@ -50,6 +50,6 @@ if __name__ == "__main__":
         text = read_file(args.file)
     else:
         text = args.text
-    summay_main(
+    summary_main(
         text, args.api_key, args.api_base, args.chunk_size, args.summary_max_len
     )
