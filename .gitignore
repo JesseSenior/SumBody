@@ -3,6 +3,7 @@
 /tests/asset
 .idea
 **/service-account.json
+/test.ps1
 **/api-key.txt
 /desktop.ini
 /poetry.lock

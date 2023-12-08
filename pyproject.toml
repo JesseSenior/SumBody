@@ -7,7 +7,7 @@ authors = [
     "Nicola Massarenti <nicola.massarenti@gmail.com>",
     "Jesse Senior <jessesenior@outlook.com>",
     "Di Fang <fti@mail.scut.edu.cn>",
-    "Xiaoye Zhu <Xshellye@github.com>",
+    "Xiaoye Zhu <xyzhu1225@foxmail.com>",
     "1722087564 <1722087564@github.com>",
     "chen021127 <chen021127@github.com>",
 ]
@@ -20,7 +20,7 @@ python = "^3.10"
 keyboard = "^0.13.5"
 loguru = "^0.6.0"
 numpy = "^1.24.1"
-openai = "^0.26.4"
+openai = "^0.28.0"
 grpcio = "^1.59.3"
 protobuf = "^3.20.0"
 pyaudio = "^0.2.13"
