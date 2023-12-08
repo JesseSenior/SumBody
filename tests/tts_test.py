@@ -1,6 +1,7 @@
-from sumbody.services import APIClinetXF
+from sumbody.services import APIClientXF
 from sumbody.services import TTSClient
 from argparse import ArgumentParser
+
 
 def parse_xf_api(parser: ArgumentParser) -> ArgumentParser:
     """
@@ -14,6 +15,8 @@ def parse_xf_api(parser: ArgumentParser) -> ArgumentParser:
         "--xf_api_key", type=str, required=True, help="Xunfei API Info."
     )
     return parser
+
+
 if __name__ == "__main__":
     parser = ArgumentParser(
         description="A unit test for speech-to-text to the Audio2Face plugin."
@@ -29,5 +32,5 @@ if __name__ == "__main__":
         APIKey=xf_api_key,
     )
     TTS_client = TTSClient(api_manager)
-    txt="原神，启动";
+    txt = "原神，启动"
     TTS_client.synthesize(txt)

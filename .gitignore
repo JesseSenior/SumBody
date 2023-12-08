@@ -1,10 +1,9 @@
 #custom
 /*.code-workspace
-/tests/asset
 .idea
 **/service-account.json
+/tests/asset
 /test.ps1
-**/api-key.txt
 /desktop.ini
 /poetry.lock
 
