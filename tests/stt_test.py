@@ -1,4 +1,4 @@
-from sumbody.services import APIClinetXF
+from sumbody.services import APIClientXF
 from sumbody.services import STTClient
 from argparse import ArgumentParser
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     xf_api_secret: str = args.xf_api_secret
     xf_api_key: str = args.xf_api_key
 
-    api_manager = APIClinetXF(
+    api_manager = APIClientXF(
         APPID=xf_appid,
         APISecret=xf_api_secret,
         APIKey=xf_api_key,
