@@ -20,41 +20,22 @@ app = typer.Typer(
 @app.command()
 def run_sumbody(
     # STT part
-    stt_appid: str = typer.Option(
+    xf_appid: str = typer.Option(
         ...,
-        help="The STT Client APPID",
-        envvar="STT_APPID",
+        help="The XF Client APPID",
+        envvar="XF_APPID",
         show_envvar=True,
     ),
-    stt_apisecret: str = typer.Option(
+    xf_apisecret: str = typer.Option(
         ...,
-        help="The STT Client APISECRET",
-        envvar="STT_APISECRET",
+        help="The XF Client APISECRET",
+        envvar="XF_APISECRET",
         show_envvar=True,
     ),
-    stt_apikey: str = typer.Option(
+    xf_apikey: str = typer.Option(
         ...,
-        help="The STT Client APIKEY",
-        envvar="STT_APIKEY",
-        show_envvar=True,
-    ),
-    # TTS part
-    tts_appid: str = typer.Option(
-        ...,
-        help="The TTS Client APPID",
-        envvar="TTS_APPID",
-        show_envvar=True,
-    ),
-    tts_apisecret: str = typer.Option(
-        ...,
-        help="The TTS Client APISECRET",
-        envvar="TTS_APISECRET",
-        show_envvar=True,
-    ),
-    tts_apikey: str = typer.Option(
-        ...,
-        help="The TTS Client APIKEY",
-        envvar="TTS_APIKEY",
+        help="The XF Client APIKEY",
+        envvar="XF_APIKEY",
         show_envvar=True,
     ),
     # OpenAI part
@@ -94,13 +75,9 @@ def run_sumbody(
 
     logger.info("microphone_rate: {}".format(microphone_rate))
 
-    logger.info("stt_appid: {}".format(stt_appid))
-    logger.info("stt_apisecret: {}".format(stt_apisecret))
-    logger.info("stt_apikey: {}".format(stt_apikey))
-
-    logger.info("tts_appid: {}".format(tts_appid))
-    logger.info("tts_apisecret: {}".format(tts_apisecret))
-    logger.info("tts_apikey: {}".format(tts_apikey))
+    logger.info("xf_appid: {}".format(xf_appid))
+    logger.info("xf_apisecret: {}".format(xf_apisecret))
+    logger.info("xf_apikey: {}".format(xf_apikey))
 
     logger.info("openai_key: {}".format(openai_key))
     logger.info(
@@ -112,9 +89,9 @@ def run_sumbody(
     logger.info("instance_name: {}".format(instance_name))
 
     managerXF = APIClientXF(
-        APPID=stt_appid,
-        APISecret=stt_apisecret,
-        APIKey=stt_apikey,
+        APPID=xf_appid,
+        APISecret=xf_apisecret,
+        APIKey=xf_apikey,
     )
 
     stt_client = STTClient(managerXF)
