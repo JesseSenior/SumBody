@@ -136,3 +136,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# VSCode Debugger
+.vscode/**
+
+# Test commands
+*.bat
+*.sh
