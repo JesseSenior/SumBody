@@ -143,3 +143,6 @@ dmypy.json
 # Test commands
 *.bat
 *.sh
+
+# Ignore pcm file
+**/*.pcm

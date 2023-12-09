@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SumBody"
-version = "0.1.0"
+version = "0.1.1"
 description = "An intelligent meeting summary assistant based on ChatGPT."
 license = "MIT"
 authors = [
