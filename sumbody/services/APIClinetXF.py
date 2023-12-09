@@ -9,10 +9,9 @@ from urllib.parse import urlencode
 from wsgiref.handlers import format_date_time
 
 
-class APIClientXF():
-    
+class APIClientXF:
     STT_HOST = "iat-api.xfyun.cn"
-    
+    TTS_HOST = "tts-api.xfyun.cn"
 
     def __init__(self, APPID: str, APISecret: str, APIKey: str) -> None:
         super().__init__()
@@ -22,12 +21,10 @@ class APIClientXF():
         self.APISecret = APISecret
         self.APIKey = APIKey
 
-
-    def get_url_stt(self) -> str:
-        """生成讯飞语音转文字的API带有鉴权信息的URL"""
+    def construct_url(self, host: str, dir: str) -> str:
         # 生成RFC1123格式的时间戳
         time = format_date_time(mktime(datetime.now().timetuple()))
-        signature_origin = f"host: {self.STT_HOST}\ndate: {time}\nGET /v2/iat HTTP/1.1"
+        signature_origin = f"host: {host}\ndate: {time}\nGET {dir} HTTP/1.1"
         # 进行hmac-sha256进行加密
         signature_sha = hmac.new(
             self.APISecret.encode("utf-8"),
@@ -42,10 +39,13 @@ class APIClientXF():
         authorization = b64encode(authorization_origin.encode("utf-8")).decode("utf-8")
         # 鉴权方法：将请求的鉴权参数组合为字典
         # @see https://www.xfyun.cn/doc/asr/voicedictation/API.html#鉴权方法
-        v = {"authorization": authorization, "date": time, "host": "iat-api.xfyun.cn"}
+        v = {"authorization": authorization, "date": time, "host": host}
         # 拼接鉴权参数，生成url
-        url = f"wss://{self.STT_HOST}/v2/iat?{urlencode(v)}"
+        url = f"wss://{host}{dir}?{urlencode(v)}"
         return url
 
+    def get_url_stt(self) -> str:
+        return self.construct_url(self.STT_HOST, "/v2/iat")
+
     def get_url_tts(self) -> str:
-        pass
+        return self.construct_url(self.TTS_HOST, "/v2/tts")
