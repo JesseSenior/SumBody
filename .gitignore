@@ -11,6 +11,7 @@
 /tests/asset
 *.bat
 *.sh
+*.ps1
 
 # Audio file
 **/*.pcm

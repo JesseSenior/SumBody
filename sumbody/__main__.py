@@ -94,7 +94,6 @@ def run_sumbody(
         APIKey=xf_apikey,
     )
 
-    stt_client = STTClient(managerXF)
     tts_client = TTSClient(managerXF)
     tsum = TextSummary(
         api_key=openai_key,
@@ -107,6 +106,7 @@ def run_sumbody(
         # 需要在控制台按任意键开始监听，然后按任意键结束监听
         # TODO: 这部分代码未经测试。后续是否需要一个图形界面？
         input("Press enter Key to start...")
+        stt_client = STTClient(managerXF)
         stt_client.start()
         input()
         stt_client.stop()
