@@ -19,5 +19,5 @@ if __name__ == "__main__":
         APIKey=xf_api_key,
     )
     TTS_client = TTSClient(api_manager)
-    txt = "原神，启动"
+    txt = "城里烟火幢幢，灯光下的人热情相拥，阴影里的人压下悸动。最亮的地方嘉然小姐浅笑起舞，光影从她袖间散落，像是雨天花伞轻旋，摇曳间洒下泪色的流珠。忽然眼睛有点模糊。我小声说：“新年好啊，嘉然小姐。”不爱嘉然小姐十年了。十年里，爱过的每个人都像她。"
     TTS_client.synthesize(txt)

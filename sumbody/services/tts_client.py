@@ -4,6 +4,7 @@ import json
 import ssl
 import _thread as thread
 import os
+import tempfile
 from pydub import AudioSegment
 from pydub.playback import play
 from .APIClinetXF import APIClientXF
@@ -30,6 +31,8 @@ class TTSClient(object):
             "text": str(base64.b64encode(text.encode("utf-8")), "UTF8"),
         }
 
+        audio_file = tempfile.NamedTemporaryFile(mode="ab", suffix=".pcm", delete=False)
+
         def on_open(ws):
             def run(*args):
                 d = {
@@ -39,8 +42,6 @@ class TTSClient(object):
                 }
                 d = json.dumps(d)
                 ws.send(d)
-                if os.path.exists("./demo.pcm"):
-                    os.remove("./demo.pcm")
 
             thread.start_new_thread(run, ())
 
@@ -57,29 +58,36 @@ class TTSClient(object):
                 if code != 0:
                     errMsg = message["message"]
                 else:
-                    with open("./demo.pcm", "ab") as f:
-                        f.write(audio)
+                    audio_file.write(audio)
             except Exception as e:
                 print("receive msg, but parse exception:", e)
 
         def on_error(ws, error):
-            ...
+            audio_file.close()
+            os.unlink(audio_file.name)
+            raise error
 
-        def on_close(ws):
-            ...
-            print("### closed ###")
+        def on_close(ws, *args):
+            print("### TTS closed. ###")
+            audio_file.close()
 
         websocket.enableTrace(False)
         wsUrl = self.API_manager.get_url_tts()
-        ws = websocket.WebSocketApp(
+        ws = websocket.WebSocketApp(  # type:ignore
             wsUrl, on_message=on_message, on_error=on_error, on_close=on_close
         )
         ws.on_open = on_open
         ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
-        with open("demo.pcm", "rb") as f:
+
+        with open(audio_file.name, "rb") as f:
             data = f.read()
+        os.unlink(audio_file.name)
+
+        audio_file = tempfile.NamedTemporaryFile(mode="ab", suffix=".wav", delete=False)
+        audio_file.close()
+
         audio = AudioSegment(data=data, sample_width=2, frame_rate=16000, channels=1)
-        tmp_file = "tmp_audio.wav"
-        audio.export(tmp_file, format="wav")
-        play(audio)
+        audio.export(audio_file.name, format="wav")
+        with open(audio_file.name, "rb") as f:
+            data = f.read()
         return data

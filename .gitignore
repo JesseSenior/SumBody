@@ -1,12 +1,21 @@
 #custom
 /*.code-workspace
 .idea
-**/service-account.json
-/tests/asset
-/test.ps1
 /desktop.ini
 /poetry.lock
-/*.wav
+
+# VSCode Debugger
+.vscode/**
+
+# Test commands
+/tests/asset
+*.bat
+*.sh
+
+# Audio file
+**/*.pcm
+**/*.wav
+**/*.mp3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -137,14 +146,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# VSCode Debugger
-.vscode/**
-
-# Test commands
-*.bat
-*.sh
-
-# Ignore pcm file
-**/*.pcm
-**/*.wav

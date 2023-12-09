@@ -123,7 +123,7 @@ def run_sumbody(
 
         # Split the audio into chunks
         audio_chunks, sample_rate = Audio2Chunks.split_audio_to_chunks(
-            audio=audio_synthesized
+            audio=audio_synthesized, audio_type="wav"
         )
 
         # Stream the audio to the Audio2Face plugin
