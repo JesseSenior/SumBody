@@ -10,9 +10,8 @@ from .APIClinetXF import APIClientXF
 
 
 class TTSClient(object):
-    def __init__(self, API_manager: APIClientXF, Text=""):
+    def __init__(self, API_manager: APIClientXF):
         self.API_manager = API_manager
-        self.Text = Text
 
         self.audio_content = b""
         # 公共参数(common)
@@ -24,18 +23,19 @@ class TTSClient(object):
             "vcn": "xiaoyan",
             "tte": "utf8",
         }
-        self.Data = {
-            "status": 2,
-            "text": str(base64.b64encode(self.Text.encode("utf-8")), "UTF8"),
-        }
 
     def synthesize(self, text: str) -> bytes:
+        data = {
+            "status": 2,
+            "text": str(base64.b64encode(text.encode("utf-8")), "UTF8"),
+        }
+
         def on_open(ws):
             def run(*args):
                 d = {
                     "common": self.CommonArgs,
                     "business": self.BusinessArgs,
-                    "data": self.Data,
+                    "data": data,
                 }
                 d = json.dumps(d)
                 ws.send(d)
@@ -82,3 +82,4 @@ class TTSClient(object):
         tmp_file = "tmp_audio.wav"
         audio.export(tmp_file, format="wav")
         play(audio)
+        return data

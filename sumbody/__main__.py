@@ -3,7 +3,7 @@ import typer
 
 from sumbody import logger
 from sumbody.services import (
-    TextToSpeech,
+    TTSClient,
     Audio2Face,
     Audio2Chunks,
     TextSummary,
