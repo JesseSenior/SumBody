@@ -6,6 +6,7 @@
 /test.ps1
 /desktop.ini
 /poetry.lock
+/*.wav
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
