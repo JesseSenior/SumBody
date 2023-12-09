@@ -38,6 +38,25 @@ def run_sumbody(
         envvar="STT_APIKEY",
         show_envvar=True,
     ),
+    # TTS part
+    tts_appid: str = typer.Option(
+        ...,
+        help="The TTS Client APPID",
+        envvar="TTS_APPID",
+        show_envvar=True,
+    ),
+    tts_apisecret: str = typer.Option(
+        ...,
+        help="The TTS Client APISECRET",
+        envvar="TTS_APISECRET",
+        show_envvar=True,
+    ),
+    tts_apikey: str = typer.Option(
+        ...,
+        help="The TTS Client APIKEY",
+        envvar="TTS_APIKEY",
+        show_envvar=True,
+    ),
     # OpenAI part
     openai_key: str = typer.Option(
         ...,
@@ -79,6 +98,10 @@ def run_sumbody(
     logger.info("stt_apisecret: {}".format(stt_apisecret))
     logger.info("stt_apikey: {}".format(stt_apikey))
 
+    logger.info("tts_appid: {}".format(tts_appid))
+    logger.info("tts_apisecret: {}".format(tts_apisecret))
+    logger.info("tts_apikey: {}".format(tts_apikey))
+
     logger.info("openai_key: {}".format(openai_key))
     logger.info(
         "openai_base: {}".format(openai_base if openai_base is not None else "DEFAULT")
@@ -95,7 +118,7 @@ def run_sumbody(
     )
 
     stt_client = STTClient(managerXF)
-
+    tts_client = TTSClient(managerXF)
     tsum = TextSummary(
         api_key=openai_key,
         api_base=openai_base,
@@ -119,7 +142,7 @@ def run_sumbody(
         logger.info("Summary: {}".format(ans))
 
         # Generate the speech audio from the response
-        audio_synthesized = TextToSpeech.synthesize(text=ans)
+        audio_synthesized = tts_client.synthesize(text=ans)
 
         # Split the audio into chunks
         audio_chunks, sample_rate = Audio2Chunks.split_audio_to_chunks(
