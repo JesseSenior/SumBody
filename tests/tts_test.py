@@ -1,20 +1,7 @@
 from sumbody.services import APIClientXF
 from sumbody.services import TTSClient
 from argparse import ArgumentParser
-
-
-def parse_xf_api(parser: ArgumentParser) -> ArgumentParser:
-    """
-    Add Xunfei API requirements to parser.
-    """
-    parser.add_argument("--xf_appid", type=str, required=True, help="Xunfei API Info.")
-    parser.add_argument(
-        "--xf_api_secret", type=str, required=True, help="Xunfei API Info."
-    )
-    parser.add_argument(
-        "--xf_api_key", type=str, required=True, help="Xunfei API Info."
-    )
-    return parser
+from stt_test import parse_xf_api
 
 
 if __name__ == "__main__":
@@ -24,8 +11,8 @@ if __name__ == "__main__":
     parser = parse_xf_api(parser)
     args = parser.parse_args()
     xf_appid: str = args.xf_appid
-    xf_api_secret: str = args.xf_api_secret
-    xf_api_key: str = args.xf_api_key
+    xf_api_secret: str = args.xf_apisecret
+    xf_api_key: str = args.xf_apikey
     api_manager = APIClientXF(
         APPID=xf_appid,
         APISecret=xf_api_secret,

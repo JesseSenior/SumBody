@@ -7,12 +7,12 @@ def parse_xf_api(parser: ArgumentParser) -> ArgumentParser:
     """
     Add Xunfei API requirements to parser.
     """
-    parser.add_argument("--xf_appid", type=str, required=True, help="Xunfei API Info.")
+    parser.add_argument("--xf-appid", type=str, required=True, help="Xunfei API Info.")
     parser.add_argument(
-        "--xf_api_secret", type=str, required=True, help="Xunfei API Info."
+        "--xf-apisecret", type=str, required=True, help="Xunfei API Info."
     )
     parser.add_argument(
-        "--xf_api_key", type=str, required=True, help="Xunfei API Info."
+        "--xf-apikey", type=str, required=True, help="Xunfei API Info."
     )
     return parser
 
@@ -25,8 +25,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     xf_appid: str = args.xf_appid
-    xf_api_secret: str = args.xf_api_secret
-    xf_api_key: str = args.xf_api_key
+    xf_api_secret: str = args.xf_apisecret
+    xf_api_key: str = args.xf_apikey
 
     api_manager = APIClientXF(
         APPID=xf_appid,
