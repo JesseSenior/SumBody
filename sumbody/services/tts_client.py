@@ -15,16 +15,7 @@ import os
 from pydub import AudioSegment
 from pydub.playback import play
 from wsgiref.handlers import format_date_time
-
-
-class APIClientXF():
-    STT_HOST = "iat-api.xfyun.cn"
-    def __init__(self, APPID: str, APISecret: str, APIKey: str) -> None:
-        super().__init__()
-        
-        self.APPID = APPID
-        self.APISecret = APISecret
-        self.APIKey = APIKey
+from sumbody.services import APIClientXF
 class TTSClient(object):
     def __init__(self, API_manager: APIClientXF, Text=""):
         self.APPID = API_manager.APPID
@@ -126,4 +117,5 @@ class TTSClient(object):
         audio = AudioSegment(data=data, sample_width=2, frame_rate=16000, channels=1)
         tmp_file = "tmp_audio.wav"
         audio.export(tmp_file, format="wav")
-        play(audio) 
+        play(audio)   
+
